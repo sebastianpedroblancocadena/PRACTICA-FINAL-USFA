@@ -1,92 +1,55 @@
-# Documentación del Proyecto: Práctica Final - Lógica de Programación II
+# Práctica Final - Lógica de Programación II
 
-## 1. Descripción General de la Web
-Esta aplicación web es un simulador interactivo de un entorno de desarrollo (IDE). Está diseñada para presentar y ejecutar visualmente una práctica de la materia **Lógica de Programación II** de la **USFA**, desarrollada por **Sebastian Blanco**.
-- **Frontend**: HTML5, Tailwind CSS y la librería de iconos Lucide.
-- **Funcionalidad interactiva**: Utiliza JavaScript para aplicar resaltado de sintaxis (*syntax highlighting*) al código C++ y simular una terminal asíncrona que emula el comportamiento de compilación y ejecución de consola, replicando la lógica exacta del script en C++.
-
----
-
-## 2. Documentación del Código C++ (Backend Lógico)
-
-El núcleo algorítmico del proyecto es un script en C++ que contiene 11 ejercicios sobre diversas estructuras de datos y algoritmos (arreglos, matrices, pilas, colas y ordenamiento).
-
-### 2.1. Estructura y Librerías Utilizadas
-El programa está estructurado en módulos y hace uso de las siguientes librerías estándar (STL):
-- `<iostream>`: Entrada/salida estándar a consola.
-- `<string>`: Manipulación de cadenas de texto.
-- `<vector>`: Uso de arreglos dinámicos para gestión de memoria eficiente.
-- `<stack>`: Implementación de Pilas (arquitectura LIFO).
-- `<queue>`: Implementación de Colas (arquitectura FIFO).
-- `<algorithm>`: Utilidades algorítmicas estándar.
-- `<cctype>`: Funciones para manipulación y evaluación de caracteres (ej. `tolower`).
-
-### 2.2. Funciones Utilitarias (Validación y UI de Consola)
-- **Constantes de Color (ANSI)**: Se definen secuencias de escape ANSI (`C_TITULO`, `C_ERROR`, `C_EXITO`, etc.) para dar un formato visual y jerarquía en la consola.
-- `leerEntero(string mensaje)` y `leerDouble(string mensaje)`: Funciones robustas que solicitan datos al usuario y previenen bucles infinitos en la consola si el usuario ingresa un tipo de dato incorrecto (letras en lugar de números). Hacen uso de `cin.clear()` y `cin.ignore()`.
-- `pausar()`: Detiene la ejecución esperando un *Enter*, simulando el `system("pause")` pero de manera multiplataforma.
-- `aMinusculas(string texto)`: Convierte cadenas completas a letras minúsculas para realizar búsquedas insensibles a mayúsculas (*case-insensitive*).
-
-### 2.3. Estructuras de Datos (Clases)
-- **`Estudiante`**: Almacena `codigo`, `nombre`, `carrera` y `promedio`.
-- **`EstudianteTramite`**: Almacena `codigo`, `nombre` y `tramite` orientado al ejercicio de sistema de atención.
-- **`Producto`**: Clase sencilla para almacenar el `nombre` dentro del inventario.
+## Información General
+* **Institución:** Universidad Privada San Francisco de Asís (USFA)[cite: 6].
+* **Carrera:** Ingeniería de Sistemas[cite: 6].
+* **Materia:** Lógica de Programación II[cite: 6].
+* **Estudiante:** Sebastian Blanco[cite: 6].
 
 ---
 
-### 2.4. Detalle de Ejercicios
+## Descripción del Proyecto
+Este repositorio contiene la solución completa a la **Práctica Final** de la asignatura Lógica de Programación II[cite: 6]. El proyecto abarca un conjunto de **11 módulos en C++** que evalúan el dominio de estructuras de datos dinámicas, operaciones matriciales, algoritmos de ordenamiento, búsqueda y gestión de colecciones avanzadas mediante la Biblioteca Estándar de Plantillas (STL)[cite: 6].
 
-#### Ejercicio 1: Estadísticas de un arreglo
-- **Descripción**: Lee un arreglo de *N* números enteros ingresados por el usuario.
-- **Procesamiento**: Itera sobre el vector para calcular e imprimir la suma total, el promedio y encontrar secuencialmente los valores máximo y mínimo.
+---
 
-#### Ejercicio 2: Buscar y contar
-- **Descripción**: Realiza búsquedas específicas dentro de un arreglo de *N* enteros.
-- **Procesamiento**: Identifica la primera posición de aparición de un número dado, cuenta el total de incidencias y guarda todas las posiciones exactas donde aparece en un `vector<int>` auxiliar.
+## Arquitectura y Lógica del Código (C++)
+El código fuente principal (`main.cpp`) implementa buenas prácticas de programación estructurada y modularización:
 
-#### Ejercicio 3: Ordenamiento
-- **Descripción**: Ordena un vector numérico de manera ascendente.
-- **Procesamiento**: Implementa el clásico **Algoritmo de Burbuja (Bubble Sort)** con complejidad `O(n^2)`. Recorre el arreglo intercambiando elementos adyacentes si el elemento actual es mayor al siguiente.
+* **Librerías Estándar Utilizadas:**
+  * `<iostream>` y `<string>`: Manejo seguro de flujos de entrada/salida y cadenas de texto[cite: 6].
+  * `<vector>`: Creación de arreglos dinámicos unidimensionales y bidimensionales (matrices) con asignación de memoria eficiente en tiempo de ejecución[cite: 6].
+  * `<stack>`: Implementación de la estructura LIFO (Last In, First Out) para la simulación de historiales[cite: 6].
+  * `<queue>`: Implementación de la estructura FIFO (First In, First Out) para la gestión de colas de atención[cite: 6].
+  * `<algorithm>` y `<cctype>`: Manipulación avanzada de caracteres y cadenas (*case-insensitive*)[cite: 6].
 
-#### Ejercicio 4: Búsqueda de palabras
-- **Descripción**: Busca una cadena de texto (*string*) dentro de un arreglo de palabras.
-- **Procesamiento**: Convierte de forma dinámica tanto las palabras del vector como el término de búsqueda a minúsculas usando la función `aMinusculas()` para garantizar coincidencias independientemente de cómo se escribió el texto.
+* **Robustez y Manejo de Errores:**
+  * Se implementaron funciones de validación de entrada (`leerEntero` y `leerDouble`) que interceptan errores de tipo de datos mediante el control de estados del flujo (`cin.clear()` y `cin.ignore()`), evitando caídas de ejecución[cite: 6].
+  * Interfaz de consola estilizada mediante secuencias de escape ANSI para diferenciar visualmente títulos, secciones, errores y mensajes de éxito[cite: 6].
 
-#### Ejercicio 5: Registro de estudiantes
-- **Descripción**: Sistema básico de gestión sobre un arreglo de objetos `vector<Estudiante>`.
-- **Procesamiento**: Registra estudiantes, imprime el catálogo completo, busca perfiles por código (búsqueda exacta) o por nombre (búsqueda insensible), e identifica al alumno que posee el mayor promedio aritmético.
+---
 
-#### Ejercicio 6: Estadísticas de una matriz
-- **Descripción**: Crea y evalúa una matriz bidimensional dinámica de tamaño *N x M* (filas x columnas).
-- **Procesamiento**: Recorre la matriz utilizando dos bucles `for` anidados para sumar todos los elementos, obtener el promedio general y encontrar los valores absolutos máximo y mínimo.
+## Desglose Lógico por Módulos (Ejercicios)
 
-#### Ejercicio 7: Operaciones con matrices cuadradas
-- **Descripción**: Ejecuta álgebra de matrices sobre dos matrices cuadradas de tamaño *N x N* (Matriz A y Matriz B).
-- **Procesamiento**:
-  - **Suma y resta**: Iteración simultánea de matrices (`A[i][j] ± B[i][j]`).
-  - **Diagonales**: Extracción lineal de la diagonal principal (`A[i][i]`) y secundaria (`A[i][n-1-i]`).
-  - **Sumatoria cruzada**: Suma individual del contenido de cada fila y de cada columna de la Matriz A.
+| # | Tema / Módulo | Descripción de la Lógica e Implementación en C++ |
+| :--- | :--- | :--- |
+| **1** | Estadísticas de un arreglo | Utiliza `std::vector<int>` de tamaño dinámico $N$, iterando linealmente para calcular la sumatoria total, el promedio aritmético y los valores extremos (`mayor` y `menor`)[cite: 6]. |
+| **2** | Buscar y contar | Implementa una búsqueda secuencial para ubicar la primera coincidencia de un valor, computar su frecuencia total y almacenar las posiciones de índice en un vector auxiliar[cite: 6]. |
+| **3** | Ordenamiento (Bubble Sort) | Aplica el algoritmo de ordenamiento de burbuja mediante bucles anidados para comparar elementos adyacentes y realizar intercambios condicionales temporales (`temp`)[cite: 6]. |
+| **4** | Búsqueda de palabras | Realiza búsquedas de texto ignorando mayúsculas y minúsculas (*case-insensitive*) transformando dinámicamente cada carácter por referencia (`char &c`) mediante `tolower`[cite: 6]. |
+| **5** | Registro de estudiantes | Modela objetos mediante la clase `Estudiante` para encapsular atributos heterogéneos (código, nombre, carrera, promedio), permitiendo búsquedas por claves específicas y cálculo de máximos[cite: 6]. |
+| **6** | Estadísticas de una matriz | Gestiona una estructura anidada `vector<vector<int>>` de dimensiones $F \times C$, procesando la matriz en doble bucle para hallar sumas acumuladas, promedios y límites[cite: 6]. |
+| **7** | Operaciones con matriz | Procesa matrices cuadradas $N \times N$ realizando suma/resta algebraica matricial, extracción de la diagonal principal (`i == j`), diagonal secundaria (`[i][n - 1 - i]`) y sumatorias por filas o columnas[cite: 6]. |
+| **8** | Buscar en una matriz | Recorre una matriz bidimensional mapeando y devolviendo las coordenadas exactas de fila y columna de todas las coincidencias encontradas[cite: 6]. |
+| **9** | Historial de páginas (Pilas) | Simula el comportamiento de un navegador web aplicando `std::stack<string>`, manipulando punteros lógicos con `push()` (visitar), `pop()` (regresar) y `top()` (ver actual)[cite: 6]. |
+| **10** | Sistema de atención (Colas) | Modela una cola de atención estudiantil usando `std::queue<EstudianteTramite>`, utilizando `push()` para encolar y la combinación de `front()` con `pop()` para despachar[cite: 6]. |
+| **11** | Inventario + matriz | Sincroniza un vector unidimensional de objetos `Producto` con una matriz de ventas configurada con 5 columnas fijas (días hábiles), cruzando índices para hallar productos más rentables y picos diarios[cite: 6]. |
 
-#### Ejercicio 8: Buscar en una matriz
-- **Descripción**: Ubica un valor dentro de una tabla bidimensional (Matriz *N x M*).
-- **Procesamiento**: Retorna y muestra todas las coordenadas exactas `[Fila, Columna]` donde se produce una coincidencia, así como el conteo total de veces que se repite el número en la tabla.
+---
 
-#### Ejercicio 9: Historial de páginas (Estructura de Pila)
-- **Descripción**: Simula de forma lógica el historial de navegación de un navegador web.
-- **Procesamiento**: Emplea la estructura `std::stack<string>` (arquitectura LIFO: *Last In, First Out*). Las opciones del menú permiten hacer `push` de nuevas URLs, regresar (`pop`) a la página anterior y visualizar la página que está en el tope (`top`).
+## Compilación y Ejecución
+Para compilar y ejecutar el código fuente en un entorno local con `g++`:
 
-#### Ejercicio 10: Sistema de atención (Estructura de Cola)
-- **Descripción**: Emula un sistema para filas de atención para estudiantes.
-- **Procesamiento**: Utiliza la estructura `std::queue<EstudianteTramite>` (arquitectura FIFO: *First In, First Out*). Permite registrar (encolar) estudiantes al final de la fila, atender y retirar (`pop`) al que está al frente (`front()`) e imprimir en pantalla el estado actual de los que restan en la cola.
-
-#### Ejercicio 11: Inventario y matriz de ventas multidimensional
-- **Descripción**: Integra vectores de objetos unidimensionales y matrices numéricas bidimensionales para estadísticas de ventas semanales.
-- **Procesamiento**:
-  - Almacena un catálogo en `vector<Producto>`.
-  - Mantiene una matriz `vector<vector<int>> ventas` asociando las filas a los productos y 5 columnas a los días laborables (Lunes a Viernes).
-  - Efectúa agregaciones para calcular y mostrar ventas totales por producto (suma de la fila) y totales por día (suma de la columna), dictaminando cuál es el producto estrella y el día de mayor comercio.
-
-### 2.5. Ciclo Principal (`main()`)
-Actúa como la interfaz de usuario, proveyendo un "Menú de Práctica Final". 
-- Se apoya en una estructura iterativa `do-while` para mantener el programa vivo hasta recibir una instrucción de salida (0).
-- Usa un bloque condicional `switch-case` para direccionar la ejecución hacia cada una de las 11 funciones modulares correspondientes.
+```bash
+g++ -O2 main.cpp -o practica_final
+./practica_final
