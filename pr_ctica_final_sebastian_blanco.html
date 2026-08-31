@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Práctica Final · Lógica de Programación II · USFA</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --c-bg: #020617;
+    --c-panel: #0f172a;
+    --c-cyan: #22d3ee;
+    --c-blue: #38bdf8;
+  }
+  html{ scroll-behavior: smooth; }
+  body{
+    background-color: var(--c-bg);
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  .font-code{ font-family: 'Fira Code', ui-monospace, monospace; }
+
+  .text-gradient{
+    background-image: linear-gradient(100deg, #38bdf8 0%, #22d3ee 55%, #67e8f9 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* custom scrollbars for the two IDE panels */
+  .custom-scroll::-webkit-scrollbar{ width: 10px; height: 10px; }
+  .custom-scroll::-webkit-scrollbar-track{ background: transparent; }
+  .custom-scroll::-webkit-scrollbar-thumb{
+    background-color: #1e293b;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  .custom-scroll::-webkit-scrollbar-thumb:hover{ background-color: #334155; }
+  .custom-scroll{ scrollbar-width: thin; scrollbar-color: #1e293b transparent; }
+
+  /* single orchestrated entrance for the hero content */
+  @keyframes fadeInUp{
+    from{ opacity: 0; transform: translateY(22px); }
+    to{ opacity: 1; transform: translateY(0); }
+  }
+  .fade-in-up{ animation: fadeInUp 0.9s cubic-bezier(.16,.84,.44,1) both; }
+  .fade-in-up.d1{ animation-delay: .08s; }
+  .fade-in-up.d2{ animation-delay: .2s; }
+  .fade-in-up.d3{ animation-delay: .34s; }
+  .fade-in-up.d4{ animation-delay: .48s; }
+
+  /* shimmer sweep, triggered on hover only */
+  .btn-shimmer{ position: relative; overflow: hidden; isolation: isolate; }
+  .btn-shimmer::after{
+    content: "";
+    position: absolute;
+    top: 0; left: -60%;
+    width: 40%; height: 100%;
+    background: linear-gradient(115deg, transparent, rgba(255,255,255,.35), transparent);
+    transform: skewX(-18deg);
+    transition: left .65s ease;
+  }
+  .btn-shimmer:hover::after{ left: 130%; }
+
+  @keyframes blink{ 0%,49%{ opacity:1; } 50%,100%{ opacity:0; } }
+  .term-cursor{ display:inline-block; width:8px; height:16px; background:#4ade80; vertical-align:-3px; animation: blink 1s step-end infinite; }
+
+  #code-content .kw{ color:#f472b6; }
+  #code-content .str{ color:#fbbf24; }
+  #code-content .cmt{ color:#64748b; font-style: italic; }
+  #code-content .pre{ color:#c084fc; }
+  #code-content .num{ color:#fb923c; }
+
+  ::selection{ background: rgba(34,211,238,.25); }
+</style>
+</head>
+<body class="bg-slate-950 text-slate-300 antialiased">
+
+  <!-- HEADER -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-slate-950/70 backdrop-blur-md border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-6 md:px-10 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="bg-white rounded-md px-2.5 py-1">
+          <span class="text-slate-900 font-extrabold text-sm tracking-tight">USFA</span>
+        </div>
+        <span class="hidden sm:block text-sm text-slate-400">Universidad Privada San Francisco de Asís</span>
+      </div>
+      <span class="text-sm text-slate-400">Ingeniería de Sistemas</span>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0">
+      <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1920&q=80"
+           alt="" class="w-full h-full object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-b from-slate-950/70 via-slate-950/85 to-slate-950"></div>
+      <div class="absolute inset-0 bg-slate-950/40"></div>
+    </div>
+
+    <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
+      <p class="fade-in-up d1 text-cyan-400 font-code text-sm md:text-base mb-5">Lógica de Programación II</p>
+      <h1 class="fade-in-up d2 text-5xl md:text-7xl lg:text-8xl font-extrabold leading-[0.95] tracking-tight">
+        <span class="text-gradient">Práctica Final</span><br />
+        <span class="text-slate-100">/ USFA</span>
+      </h1>
+      <p class="fade-in-up d3 mt-6 text-lg text-slate-400">Desarrollado por: <span class="text-slate-200">Sebastian Blanco</span></p>
+
+      <a href="#workspace"
+         class="btn-shimmer fade-in-up d4 mt-12 inline-flex items-center gap-2.5 bg-gradient-to-r from-blue-500 to-cyan-400 text-slate-950 font-semibold px-7 py-3.5 rounded-lg hover:brightness-110 transition">
+        <i data-lucide="terminal-square" class="w-5 h-5"></i>
+        Mostrar Código y Entorno
+      </a>
+    </div>
+
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 text-slate-500">
+      <i data-lucide="chevron-down" class="w-5 h-5 animate-bounce"></i>
+    </div>
+  </section>
+
+  <!-- WORKSPACE -->
+  <section id="workspace" class="py-20 md:py-28 px-5 md:px-10 bg-slate-950 border-t border-slate-900">
+    <div class="max-w-7xl mx-auto">
+      <div class="mb-10">
+        <h2 class="text-2xl md:text-3xl font-bold text-slate-100">Entorno de desarrollo</h2>
+        <p class="mt-2 text-slate-400 max-w-2xl">Código fuente en C++ a la izquierda, consola compilada y ejecutada en vivo a la derecha. Presiona <span class="text-green-400 font-code">RUN</span> para iniciar el programa.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- CODE PANEL -->
+        <div class="flex flex-col rounded-xl overflow-hidden border border-slate-800 bg-slate-900 shadow-2xl shadow-black/40">
+          <div class="flex items-center bg-slate-950/60 border-b border-slate-800 px-3 pt-3 gap-2">
+            <div class="flex items-center gap-2 bg-slate-900 border-t-2 border-cyan-400 px-4 py-2 rounded-t-md text-sm text-slate-200">
+              <svg width="16" height="16" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#00599C" d="M115.4 30.7L67.1 2.9c-.8-.5-1.9-.7-3.1-.7-1.2 0-2.3.3-3.1.7l-48 27.9c-1.7 1-2.9 3.5-2.9 5.4v55.7c0 1.1.2 2.4 1 3.5l106.9-62c-.6-1.1-1.5-2-2.5-2.7z"/>
+                <path fill="#004482" d="M11 92.3c.5.8 1.2 1.5 1.9 1.9l48.1 27.9c.8.5 1.9.7 3.1.7 1.2 0 2.3-.3 3.1-.7l48-27.9c1.7-1 2.9-3.5 2.9-5.4V33.1c0-.9-.1-1.9-.6-2.8L11 92.3z"/>
+                <path fill="#fff" d="M64 88.9c-13.8 0-24.9-11.1-24.9-24.9S50.2 39.1 64 39.1c8.8 0 17 4.7 21.4 12.3l14.7-8.5c-7.8-13.5-22.4-21.9-36.1-21.9-24.3 0-44 19.7-44 44s19.7 44 44 44c13.7 0 28.3-8.4 36.1-21.9L85.4 76.6C81 84.2 72.8 88.9 64 88.9z"/>
+                <path fill="#fff" d="M97 52h5.5v5.5H97zm10 0h5.5v5.5H107zM97 42h5.5v5.5H97zm10 0h5.5v5.5H107z"/>
+              </svg>
+              main.cpp
+            </div>
+          </div>
+          <div class="custom-scroll overflow-auto bg-slate-950/40" style="height:600px;">
+            <pre class="font-code text-[13px] leading-relaxed p-5 whitespace-pre"><code id="code-content" class="text-slate-300"></code></pre>
+          </div>
+        </div>
+
+        <!-- TERMINAL PANEL -->
+        <div class="flex flex-col rounded-xl overflow-hidden border border-slate-800 bg-black shadow-2xl shadow-black/40">
+          <div class="flex items-center justify-between bg-slate-950/60 border-b border-slate-800 px-4 py-3">
+            <div class="flex items-center gap-2 text-sm text-slate-400">
+              <i data-lucide="square-terminal" class="w-4 h-4"></i>
+              Terminal - Salida
+            </div>
+            <button id="run-btn"
+                    class="btn-shimmer flex items-center gap-1.5 bg-green-600 hover:bg-green-500 text-white text-sm font-semibold px-3.5 py-1.5 rounded-md transition">
+              <i data-lucide="play" class="w-3.5 h-3.5"></i>
+              RUN
+            </button>
+          </div>
+
+          <div id="terminal-output" class="custom-scroll flex-1 overflow-auto p-4 font-code text-[13px] leading-relaxed" style="height:552px;"></div>
+
+          <div id="input-wrapper" class="hidden items-center gap-2 border-t border-slate-800 px-4 py-2.5 bg-slate-950/60">
+            <span class="term-cursor"></span>
+            <input id="terminal-input" type="text" autocomplete="off" spellcheck="false"
+                   class="flex-1 bg-transparent outline-none text-green-400 font-code text-[13px]" />
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-8 text-center text-xs text-slate-600 border-t border-slate-900">
+    Universidad Privada San Francisco de Asís — Ingeniería de Sistemas<br/>
+    Lógica de Programación II
+  </footer>
+
+  <!-- RAW C++ SOURCE (kept as plain text so no JS-escaping is needed) -->
+  <script type="text/plain" id="cpp-source">
+#include <iostream>
+#include <string>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <algorithm>
+#include <cctype>
+using namespace std;
+
+// ==========================================
+// COLORES SUTILES PARA LA CONSOLA (ANSI)
+// ==========================================
+const string C_RESET   = "\033[0m";
+const string C_TITULO   = "\033[1;36m"; // Cian brillante para títulos
+const string C_SECCION  = "\033[1;33m"; // Amarillo sutil para secciones
+const string C_ERROR    = "\033[31m";   // Rojo suave para excepciones/errores
+const string C_EXITO    = "\033[32m";   // Verde suave para mensajes de éxito
+
+// ==========================================
+// FUNCIONES DE VALIDACIÓN Y UTILIDADES
+// ==========================================
+int leerEntero(string mensaje) {
+    int valor;
+    cout << mensaje;
+    while (!(cin >> valor)) {
+        cout << C_ERROR << "Entrada inválida. Por favor, ingrese un número entero válido: " << C_RESET;
+        cin.clear();
+        cin.ignore(10000, '\n');
+    }
+    return valor;
+}
+
+double leerDouble(string mensaje) {
+    double valor;
+    cout << mensaje;
+    while (!(cin >> valor)) {
+        cout << C_ERROR << "Entrada inválida. Por favor, ingrese un valor numérico válido: " << C_RESET;
+        cin.clear();
+        cin.ignore(10000, '\n');
+    }
+    return valor;
+}
+
+void pausar() {
+    cout << "\nPresione Enter para continuar...";
+    cin.ignore(10000, '\n');
+    cin.get();
+}
+
+string aMinusculas(string texto) {
+    string resultado = texto;
+    for (char &c : resultado) {
+        c = tolower(c);
+    }
+    return resultado;
+}
+
+// ==========================================
+// CLASES Y ESTRUCTURAS
+// ==========================================
+class Estudiante {
+public:
+    string codigo;
+    string nombre;
+    string carrera;
+    double promedio;
+};
+
+class EstudianteTramite {
+public:
+    string codigo;
+    string nombre;
+    string tramite;
+};
+
+class Producto {
+public:
+    string nombre;
+};
+
+// ==========================================
+// FUNCIONES PARA CADA EJERCICIO
+// ==========================================
+
+// EJERCICIO 1
+void ejercicio1() {
+    cout << C_TITULO << "\n--- Ejercicio 1: Estadísticas de un arreglo ---\n" << C_RESET;
+    int n = leerEntero("Por favor, ingrese la cantidad de números enteros para el arreglo: ");
+    if (n <= 0) {
+        cout << C_ERROR << "La cantidad debe ser mayor a cero.\n" << C_RESET;
+        pausar();
+        return;
+    }
+
+    vector<int> arreglo(n);
+    int suma = 0;
+
+    for (int i = 0; i < n; i++) {
+        arreglo[i] = leerEntero("Ingrese el número para la posición [" + to_string(i) + "]: ");
+        suma += arreglo[i];
+    }
+
+    cout << C_SECCION << "\nContenido del arreglo: " << C_RESET;
+    int mayor = arreglo[0];
+    int menor = arreglo[0];
+
+    for (int i = 0; i < n; i++) {
+        cout << arreglo[i] << " ";
+        if (arreglo[i] > mayor) mayor = arreglo[i];
+        if (arreglo[i] < menor) menor = arreglo[i];
+    }
+
+    double promedio = (double)suma / n;
+    cout << "\nSuma total: " << suma;
+    cout << "\nPromedio: " << promedio;
+    cout << "\nNúmero mayor: " << mayor;
+    cout << "\nNúmero menor: " << menor << "\n";
+    pausar();
+}
+
+// EJERCICIO 2
+void ejercicio2() {
+    cout << C_TITULO << "\n--- Ejercicio 2: Buscar y contar ---\n" << C_RESET;
+    int n = leerEntero("Por favor, ingrese la cantidad de números del arreglo: ");
+    if (n <= 0) {
+        cout << C_ERROR << "La cantidad debe ser mayor a cero.\n" << C_RESET;
+        pausar();
+        return;
+    }
+
+    vector<int> arreglo(n);
+    for (int i = 0; i < n; i++) {
+        arreglo[i] = leerEntero("Ingrese el número para la posición [" + to_string(i) + "]: ");
+    }
+
+    int buscar = leerEntero("¿Qué número desea buscar?: ");
+
+    int primeraPos = -1;
+    int cantidad = 0;
+    vector<int> posiciones;
+
+    for (int i = 0; i < n; i++) {
+        if (arreglo[i] == buscar) {
+            if (primeraPos == -1) primeraPos = i;
+            cantidad++;
+            posiciones.push_back(i);
+        }
+    }
+
+    if (cantidad > 0) {
+        cout << C_EXITO << "Primera posición encontrada: " << primeraPos << "\n";
+        cout << "Cantidad de veces que aparece: " << cantidad << "\n";
+        cout << "Posiciones donde aparece: ";
+        for (int pos : posiciones) cout << pos << " ";
+        cout << "\n" << C_RESET;
+    } else {
+        cout << C_ERROR << "El número " << buscar << " no se encuentra en el arreglo.\n" << C_RESET;
+    }
+    pausar();
+}
+
+// EJERCICIO 3
+void ejercicio3() {
+    cout << C_TITULO << "\n--- Ejercicio 3: Ordenamiento ---\n" << C_RESET;
+    int n = leerEntero("Por favor, ingrese la cantidad de números a ordenar: ");
+    if (n <= 0) {
+        cout << C_ERROR << "La cantidad debe ser mayor a cero.\n" << C_RESET;
+        pausar();
+        return;
+    }
+
+    vector<int> arreglo(n);
+    for (int i = 0; i < n; i++) {
+        arreglo[i] = leerEntero("Ingrese el número para la posición [" + to_string(i) + "]: ");
+    }
+
+    cout << C_SECCION << "Arreglo ANTES de ordenar: " << C_RESET;
+    for (int num : arreglo) cout << num << " ";
+    cout << "\n";
+
+    // Algoritmo de Burbuja
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arreglo[j] > arreglo[j + 1]) {
+                int temp = arreglo[j];
+                arreglo[j] = arreglo[j + 1];
+                arreglo[j + 1] = temp;
+            }
+        }
+    }
+
+    cout << C_EXITO << "Arreglo DESPUÉS de ordenar: " << C_RESET;
+    for (int num : arreglo) cout << num << " ";
+    cout << "\n";
+    pausar();
+}
+
+// EJERCICIO 4
+void ejercicio4() {
+    cout << C_TITULO << "\n--- Ejercicio 4: Búsqueda de palabras ---\n" << C_RESET;
+    int n = leerEntero("Por favor, ingrese la cantidad de palabras del arreglo: ");
+    if (n <= 0) {
+        cout << C_ERROR << "La cantidad debe ser mayor a cero.\n" << C_RESET;
+        pausar();
+        return;
+    }
+
+    vector<string> palabras(n);
+    for (int i = 0; i < n; i++) {
+        cout << "Ingrese la palabra [" << i << "]: ";
+        cin >> palabras[i];
+    }
+
+    string buscar;
+    cout << "¿Qué palabra desea buscar? (No distingue mayúsculas/minúsculas): ";
+    cin >> buscar;
+
+    string buscarMinuscula = aMinusculas(buscar);
+    int cantidad = 0;
+    vector<int> posiciones;
+
+    for (int i = 0; i < n; i++) {
+        if (aMinusculas(palabras[i]) == buscarMinuscula) {
+            cantidad++;
+            posiciones.push_back(i);
+        }
+    }
+
+    if (cantidad > 0) {
+        cout << C_EXITO << "La palabra SÍ existe en el arreglo.\n";
+        cout << "Cantidad de veces que aparece: " << cantidad << "\n";
+        cout << "Posiciones donde se encuentra: ";
+        for (int pos : posiciones) cout << pos << " ";
+        cout << "\n" << C_RESET;
+    } else {
+        cout << C_ERROR << "La palabra no existe en el arreglo.\n" << C_RESET;
+    }
+    pausar();
+}
+
+// EJERCICIO 5
+void ejercicio5() {
+    cout << C_TITULO << "\n--- Ejercicio 5: Registro de estudiantes ---\n" << C_RESET;
+    int n = leerEntero("¿Cuántos estudiantes desea registrar?: ");
+    if (n <= 0) {
+        cout << C_ERROR << "La cantidad debe ser mayor a cero.\n" << C_RESET;
+        pausar();
+        return;
+    }
+
+    vector<Estudiante> estudiantes(n);
+    for (int i = 0; i < n; i++) {
+        cout << C_SECCION << "\n--- Datos del estudiante " << (i + 1) << " ---\n" << C_RESET;
+        cout << "Código del estudiante: "; cin >> estudiantes[i].codigo;
+        cout << "Nombre del estudiante: "; cin >> estudiantes[i].nombre;
+        cout << "Carrera: "; cin >> estudiantes[i].carrera;
+        estudiantes[i].promedio = leerDouble("Promedio: ");
+    }
+
+    cout << C_SECCION << "\nLista de todos los estudiantes registrados:\n" << C_RESET;
+    int indiceMayorPromedio = 0;
+    for (int i = 0; i < n; i++) {
+        cout << "- [" << estudiantes[i].codigo << "] " << estudiantes[i].nombre
+             << " (" << estudiantes[i].carrera << ") Promedio: " << estudiantes[i].promedio << "\n";
+        if (estudiantes[i].promedio > estudiantes[indiceMayorPromedio].promedio) {
+            indiceMayorPromedio = i;
+        }
+    }
+
+    string codigoBuscar;
+    cout << "\nIngrese un código para buscar al estudiante: ";
+    cin >> codigoBuscar;
+    bool encontradoCod = false;
+    for (auto &est : estudiantes) {
+        if (est.codigo == codigoBuscar) {
+            cout << C_EXITO << "Encontrado: " << est.nombre << " de la carrera " << est.carrera << "\n" << C_RESET;
+            encontradoCod = true;
+        }
+    }
+    if (!encontradoCod) cout << C_ERROR << "No se encontró ningún estudiante con ese código.\n" << C_RESET;
+
+    string nombreBuscar;
+    cout << "\nIngrese un nombre para buscar al estudiante: ";
+    cin >> nombreBuscar;
+    bool encontradoNom = false;
+    for (auto &est : estudiantes) {
+        if (aMinusculas(est.nombre) == aMinusculas(nombreBuscar)) {
+            cout << C_EXITO << "Encontrado: Código " << est.codigo << ", Carrera " << est.carrera << "\n" << C_RESET;
+            encontradoNom = true;
+        }
+    }
+    if (!encontradoNom) cout << C_ERROR << "No se encontró ningún estudiante con ese nombre.\n" << C_RESET;
+
+    cout << C_EXITO << "\nEl estudiante con MAYOR promedio es: "
+         << estudiantes[indiceMayorPromedio].nombre
+         << " con " << estudiantes[indiceMayorPromedio].promedio << "\n" << C_RESET;
+    pausar();
+}
+
+// EJERCICIO 6
+void ejercicio6() {
+    cout << C_TITULO << "\n--- Ejercicio 6: Estadísticas de una matriz ---\n" << C_RESET;
+    int filas = leerEntero("Ingrese la cantidad de filas de la matriz: ");
+    int columnas = leerEntero("Ingrese la cantidad de columnas de la matriz: ");
+    if (filas <= 0 || columnas <= 0) {
+        cout << C_ERROR << "Las dimensiones deben ser mayores a cero.\n" << C_RESET;
+        pausar();
+        return;
+    }
+
+    vector<vector<int>> matriz(filas, vector<int>(columnas));
+    int suma = 0;
+
+    for (int i = 0; i < filas; i++) {
+        for (int j = 0; j < columnas; j++) {
+            matriz[i][j] = leerEntero("Ingrese el valor para la fila " + to_string(i) + ", columna " + to_string(j) + ": ");
+            suma += matriz[i][j];
+        }
+    }
+
+    cout << C_SECCION << "\nContenido de la matriz:\n" << C_RESET;
+    int mayor = matriz[0][0], menor = matriz[0][0];
+    for (int i = 0; i < filas; i++) {
+        for (int j = 0; j < columnas; j++) {
+            cout << matriz[i][j] << "\t";
+            if (matriz[i][j] > mayor) mayor = matriz[i][j];
+            if (matriz[i][j] < menor) menor = matriz[i][j];
+        }
+        cout << "\n";
+    }
+
+    double promedio = (double)suma / (filas * columnas);
+    cout << "\nSuma total: " << suma;
+    cout << "\nPromedio: " << promedio;
+    cout << "\nValor mayor: " << mayor;
+    cout << "\nValor menor: " << menor << "\n";
+    pausar();
+}
+
+// EJERCICIO 7
+void ejercicio7() {
+    cout << C_TITULO << "\n--- Ejercicio 7: Operaciones con matriz ---\n" << C_RESET;
+    int n = leerEntero("Ingrese el tamaño N para las matrices cuadradas (NxN): ");
+    if (n <= 0) {
+        cout << C_ERROR << "El tamaño debe ser mayor a cero.\n" << C_RESET;
+        pausar();
+        return;
+    }
+
+    vector<vector<int>> matrizA(n, vector<int>(n));
+    vector<vector<int>> matrizB(n, vector<int>(n));
+
+    cout << C_SECCION << "\nDatos para la Matriz A:\n" << C_RESET;
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            matrizA[i][j] = leerEntero("Fila " + to_string(i) + ", columna " + to_string(j) + ": ");
+
+    cout << C_SECCION << "\nDatos para la Matriz B:\n" << C_RESET;
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            matrizB[i][j] = leerEntero("Fila " + to_string(i) + ", columna " + to_string(j) + ": ");
+
+    cout << C_SECCION << "\nSuma de matrices (A + B):\n" << C_RESET;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) cout << matrizA[i][j] + matrizB[i][j] << "\t";
+        cout << "\n";
+    }
+
+    cout << C_SECCION << "\nResta de matrices (A - B):\n" << C_RESET;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) cout << matrizA[i][j] - matrizB[i][j] << "\t";
+        cout << "\n";
+    }
+
+    cout << C_SECCION << "\nDiagonal principal de Matriz A: " << C_RESET;
+    for (int i = 0; i < n; i++) cout << matrizA[i][i] << " ";
+
+    cout << C_SECCION << "\nDiagonal secundaria de Matriz A: " << C_RESET;
+    for (int i = 0; i < n; i++) cout << matrizA[i][n - 1 - i] << " ";
+
+    cout << C_SECCION << "\n\nSuma de cada fila en Matriz A:\n" << C_RESET;
+    for (int i = 0; i < n; i++) {
+        int sumaFila = 0;
+        for (int j = 0; j < n; j++) sumaFila += matrizA[i][j];
+        cout << "Fila " << i << ": " << sumaFila << "\n";
+    }
+
+    cout << C_SECCION << "\nSuma de cada columna en Matriz A:\n" << C_RESET;
+    for (int j = 0; j < n; j++) {
+        int sumaCol = 0;
+        for (int i = 0; i < n; i++) sumaCol += matrizA[i][j];
+        cout << "Columna " << j << ": " << sumaCol << "\n";
+    }
+    pausar();
+}
+
+// EJERCICIO 8
+void ejercicio8() {
+    cout << C_TITULO << "\n--- Ejercicio 8: Buscar en una matriz ---\n" << C_RESET;
+    int filas = leerEntero("Ingrese filas: ");
+    int columnas = leerEntero("Ingrese columnas: ");
+    if (filas <= 0 || columnas <= 0) {
+        cout << C_ERROR << "Las dimensiones deben ser mayores a cero.\n" << C_RESET;
+        pausar();
+        return;
+    }
+
+    vector<vector<int>> matriz(filas, vector<int>(columnas));
+    for (int i = 0; i < filas; i++)
+        for (int j = 0; j < columnas; j++)
+            matriz[i][j] = leerEntero("Valor en [" + to_string(i) + "][" + to_string(j) + "]: ");
+
+    int buscar = leerEntero("¿Qué número desea buscar en la matriz?: ");
+
+    int cantidad = 0;
+    cout << C_SECCION << "\nResultados de búsqueda:\n" << C_RESET;
+    for (int i = 0; i < filas; i++) {
+        for (int j = 0; j < columnas; j++) {
+            if (matriz[i][j] == buscar) {
+                cout << C_EXITO << "Encontrado en: Fila " << i << ", Columna " << j << "\n" << C_RESET;
+                cantidad++;
+            }
+        }
+    }
+
+    if (cantidad > 0) {
+        cout << C_EXITO << "Cantidad total de veces que aparece: " << cantidad << "\n" << C_RESET;
+    } else {
+        cout << C_ERROR << "El número no existe en la matriz.\n" << C_RESET;
+    }
+    pausar();
+}
+
+// EJERCICIO 9
+void ejercicio9() {
+    stack<string> historial;
+    int opcion;
+    string pagina;
+
+    do {
+        cout << C_TITULO << "\n--- Ejercicio 9: Historial de páginas ---\n" << C_RESET;
+        cout << "1. Visitar página\n";
+        cout << "2. Atrás\n";
+        cout << "3. Ver página actual\n";
+        cout << "4. Mostrar historial\n";
+        cout << "0. Salir de este ejercicio\n";
+        opcion = leerEntero("Ingrese su opción: ");
+
+        switch (opcion) {
+            case 1:
+                cout << "Ingrese la URL de la página a visitar: ";
+                cin >> pagina;
+                historial.push(pagina);
+                cout << C_EXITO << "Visitando: " << pagina << "\n" << C_RESET;
+                break;
+            case 2:
+                if (historial.empty()) {
+                    cout << C_ERROR << "No hay páginas previas en el historial.\n" << C_RESET;
+                } else {
+                    cout << C_SECCION << "Regresando de: " << historial.top() << "\n" << C_RESET;
+                    historial.pop();
+                    if (!historial.empty()) {
+                        cout << C_EXITO << "Ahora estás en: " << historial.top() << "\n" << C_RESET;
+                    } else {
+                        cout << C_SECCION << "El historial quedó vacío. Pantalla de inicio.\n" << C_RESET;
+                    }
+                }
+                break;
+            case 3:
+                if (historial.empty()) cout << C_SECCION << "El navegador está en la pantalla de inicio.\n" << C_RESET;
+                else cout << C_EXITO << "Página actual: " << historial.top() << "\n" << C_RESET;
+                break;
+            case 4:
+                if (historial.empty()) {
+                    cout << C_ERROR << "El historial está vacío.\n" << C_RESET;
+                } else {
+                    stack<string> copia = historial;
+                    cout << C_SECCION << "\n--- Historial completo ---\n" << C_RESET;
+                    while (!copia.empty()) {
+                        cout << "- " << copia.top() << "\n";
+                        copia.pop();
+                    }
+                }
+                break;
+            case 0:
+                cout << "Saliendo del historial...\n";
+                break;
+            default:
+                cout << C_ERROR << "Opción no válida.\n" << C_RESET;
+        }
+        if (opcion != 0) pausar();
+    } while (opcion != 0);
+}
+
+// EJERCICIO 10
+void ejercicio10() {
+    queue<EstudianteTramite> colaAtencion;
+    int opcion;
+
+    do {
+        cout << C_TITULO << "\n--- Ejercicio 10: Sistema de atención ---\n" << C_RESET;
+        cout << "1. Registrar estudiante\n";
+        cout << "2. Atender estudiante\n";
+        cout << "3. Ver siguiente estudiante\n";
+        cout << "4. Mostrar cola\n";
+        cout << "0. Salir de este ejercicio\n";
+        opcion = leerEntero("Ingrese su opción: ");
+
+        switch (opcion) {
+            case 1: {
+                EstudianteTramite nuevo;
+                cout << "Ingrese el código del estudiante: "; cin >> nuevo.codigo;
+                cout << "Ingrese el nombre: "; cin >> nuevo.nombre;
+                cout << "Ingrese el trámite: "; cin >> nuevo.tramite;
+                colaAtencion.push(nuevo);
+                cout << C_EXITO << "Estudiante " << nuevo.nombre << " registrado exitosamente en la cola.\n" << C_RESET;
+                break;
+            }
+            case 2:
+                if (colaAtencion.empty()) {
+                    cout << C_ERROR << "No hay estudiantes en la cola para atender.\n" << C_RESET;
+                } else {
+                    cout << C_EXITO << "Atendiendo a " << colaAtencion.front().nombre << "\n" << C_RESET;
+                    colaAtencion.pop();
+
+                    if (!colaAtencion.empty()) {
+                        cout << C_SECCION << "La cola queda:\n" << C_RESET;
+                        queue<EstudianteTramite> copia = colaAtencion;
+                        while (!copia.empty()) {
+                            cout << copia.front().nombre << "\n";
+                            copia.pop();
+                        }
+                    } else {
+                        cout << C_SECCION << "La cola ha quedado vacía.\n" << C_RESET;
+                    }
+                }
+                break;
+            case 3:
+                if (colaAtencion.empty()) {
+                    cout << C_ERROR << "La cola está vacía.\n" << C_RESET;
+                } else {
+                    cout << C_EXITO << "El siguiente estudiante es: " << colaAtencion.front().nombre << "\n" << C_RESET;
+                }
+                break;
+            case 4:
+                if (colaAtencion.empty()) {
+                    cout << C_ERROR << "La cola está vacía.\n" << C_RESET;
+                } else {
+                    queue<EstudianteTramite> copia = colaAtencion;
+                    cout << C_SECCION << "\nCOLA ACTUAL:\n" << C_RESET;
+                    int pos = 1;
+                    while (!copia.empty()) {
+                        cout << pos << ". " << copia.front().nombre << "\n";
+                        copia.pop();
+                        pos++;
+                    }
+                }
+                break;
+            case 0:
+                cout << "Saliendo del sistema de atención...\n";
+                break;
+            default:
+                cout << C_ERROR << "Opción no válida.\n" << C_RESET;
+        }
+        if (opcion != 0) pausar();
+    } while (opcion != 0);
+}
+
+// EJERCICIO 11
+void ejercicio11() {
+    cout << C_TITULO << "\n--- Ejercicio 11: Inventario + matriz ---\n" << C_RESET;
+    int numProductos = leerEntero("Por favor, indique la cantidad de productos a registrar: ");
+    if (numProductos <= 0) {
+        cout << C_ERROR << "La cantidad debe ser mayor a cero.\n" << C_RESET;
+        pausar();
+        return;
+    }
+
+    vector<Producto> productos(numProductos);
+    // Filas = productos, Columnas = 5 días de la semana (L, M, X, J, V)
+    vector<vector<int>> ventas(numProductos, vector<int>(5));
+    string dias[5] = {"Lunes", "Martes", "Miércoles", "Jueves", "Viernes"};
+
+    for (int i = 0; i < numProductos; i++) {
+        cout << "\nIngrese el nombre para el Producto " << i + 1 << ": ";
+        cin >> productos[i].nombre;
+        cout << "Ingrese las ventas diarias (5 días) para " << productos[i].nombre << ":\n";
+        for (int j = 0; j < 5; j++) {
+            ventas[i][j] = leerEntero("  Ventas del día " + dias[j] + ": ");
+        }
+    }
+
+    cout << C_SECCION << "\n--- Resultados y Estadísticas ---\n" << C_RESET;
+
+    // 1. Ventas totales por producto
+    cout << C_SECCION << "\n[Ventas totales por producto]\n" << C_RESET;
+    int maxVentasProd = -1;
+    string prodMasVendido = "";
+    int sumaGlobalVentas = 0;
+
+    for (int i = 0; i < numProductos; i++) {
+        int sumaFila = 0;
+        for (int j = 0; j < 5; j++) sumaFila += ventas[i][j];
+        cout << "Producto " << i << " (" << productos[i].nombre << ") - Ventas totales: " << sumaFila << "\n";
+        sumaGlobalVentas += sumaFila;
+
+        if (sumaFila > maxVentasProd) {
+            maxVentasProd = sumaFila;
+            prodMasVendido = productos[i].nombre;
+        }
+    }
+
+    // 2. Ventas totales por día
+    cout << C_SECCION << "\n[Ventas totales por día]\n" << C_RESET;
+    int maxVentasDia = -1;
+    string diaConMasVentas = "";
+
+    for (int j = 0; j < 5; j++) {
+        int sumaColumna = 0;
+        for (int i = 0; i < numProductos; i++) sumaColumna += ventas[i][j];
+        cout << "Día " << dias[j] << " - Ventas totales: " << sumaColumna << "\n";
+
+        if (sumaColumna > maxVentasDia) {
+            maxVentasDia = sumaColumna;
+            diaConMasVentas = dias[j];
+        }
+    }
+
+    // 3, 4 y 5. Producto más vendido, Día con mayores ventas y Promedio
+    double promedioGeneral = (double)sumaGlobalVentas / (numProductos * 5);
+
+    cout << C_EXITO << "\n[Resumen Final]\n";
+    cout << "-> Producto más vendido: " << prodMasVendido << " (con " << maxVentasProd << " ventas)\n";
+    cout << "-> Día con mayores ventas: " << diaConMasVentas << " (con " << maxVentasDia << " ventas)\n";
+    cout << "-> Promedio de ventas: " << promedioGeneral << "\n" << C_RESET;
+    pausar();
+}
+
+// ==========================================
+// MENÚ PRINCIPAL
+// ==========================================
+int main() {
+    int opcion;
+    do {
+        cout << C_TITULO << "\n=============================================\n";
+        cout << "           MENÚ DE PRÁCTICA FINAL\n";
+        cout << "=============================================\n" << C_RESET;
+        cout << " 1. Estadísticas de un arreglo\n";
+        cout << " 2. Buscar y contar\n";
+        cout << " 3. Ordenamiento\n";
+        cout << " 4. Búsqueda de palabras\n";
+        cout << " 5. Registro de estudiantes\n";
+        cout << " 6. Estadísticas de una matriz\n";
+        cout << " 7. Operaciones con matriz\n";
+        cout << " 8. Buscar en una matriz\n";
+        cout << " 9. Historial de páginas\n";
+        cout << "10. Sistema de atención\n";
+        cout << "11. Inventario + matriz\n";
+        cout << " 0. Salir\n";
+        cout << "---------------------------------------------\n";
+        opcion = leerEntero("Ingrese su opción: ");
+
+        switch (opcion) {
+            case 1: ejercicio1(); break;
+            case 2: ejercicio2(); break;
+            case 3: ejercicio3(); break;
+            case 4: ejercicio4(); break;
+            case 5: ejercicio5(); break;
+            case 6: ejercicio6(); break;
+            case 7: ejercicio7(); break;
+            case 8: ejercicio8(); break;
+            case 9: ejercicio9(); break;
+            case 10: ejercicio10(); break;
+            case 11: ejercicio11(); break;
+            case 0: cout << C_EXITO << "\n¡Saliendo del programa! Que tenga un excelente día.\n" << C_RESET; break;
+            default: cout << C_ERROR << "\nOpción no válida. Por favor, intente de nuevo.\n" << C_RESET; pausar();
+        }
+    } while (opcion != 0);
+
+    return 0;
+}
+  </script>
+
+<script>
+  /* ============================================================
+     1. RESALTADO DE SINTAXIS PARA EL PANEL IZQUIERDO (main.cpp)
+     ============================================================ */
+  function escapeHtml(str){
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  const CPP_KEYWORDS = new Set([
+    'using','namespace','std','int','double','string','void','if','else','while','do','for',
+    'switch','case','default','break','continue','return','class','public','private','struct',
+    'const','true','false','vector','stack','queue','auto','char','bool'
+  ]);
+
+  function highlightCpp(code){
+    let out = '', i = 0, n = code.length;
+    while (i < n){
+      const c = code[i];
+      if (c === '/' && code[i+1] === '/'){
+        let j = code.indexOf('\n', i); if (j === -1) j = n;
+        out += `<span class="cmt">${escapeHtml(code.slice(i,j))}</span>`; i = j; continue;
+      }
+      if (c === '#'){
+        let j = code.indexOf('\n', i); if (j === -1) j = n;
+        out += `<span class="pre">${escapeHtml(code.slice(i,j))}</span>`; i = j; continue;
+      }
+      if (c === '"'){
+        let j = i+1;
+        while (j < n && code[j] !== '"'){ if (code[j] === '\\') j++; j++; }
+        j++;
+        out += `<span class="str">${escapeHtml(code.slice(i,j))}</span>`; i = j; continue;
+      }
+      if (c === "'"){
+        let j = i+1;
+        while (j < n && code[j] !== "'"){ if (code[j] === '\\') j++; j++; }
+        j++;
+        out += `<span class="str">${escapeHtml(code.slice(i,j))}</span>`; i = j; continue;
+      }
+      if (/[A-Za-z_]/.test(c)){
+        let j = i+1;
+        while (j < n && /[A-Za-z0-9_]/.test(code[j])) j++;
+        const word = code.slice(i,j);
+        out += CPP_KEYWORDS.has(word) ? `<span class="kw">${word}</span>` : escapeHtml(word);
+        i = j; continue;
+      }
+      if (/[0-9]/.test(c)){
+        let j = i+1;
+        while (j < n && /[0-9.]/.test(code[j])) j++;
+        out += `<span class="num">${code.slice(i,j)}</span>`; i = j; continue;
+      }
+      out += escapeHtml(c); i++;
+    }
+    return out;
+  }
+
+  /* ============================================================
+     2. MOTOR DE TERMINAL SIMULADA
+     ============================================================ */
+  const outputEl   = document.getElementById('terminal-output');
+  const inputWrap   = document.getElementById('input-wrapper');
+  const inputEl    = document.getElementById('terminal-input');
+  const runBtn     = document.getElementById('run-btn');
+
+  let termBuffer = '';
+  let pendingResolve = null;
+
+  function ansiToHtml(str){
+    const codes = {
+      '1;36': 'text-cyan-400 font-semibold',
+      '1;33': 'text-yellow-300 font-semibold',
+      '31':   'text-red-400',
+      '32':   'text-green-400'
+    };
+    let result = '', open = false;
+    const parts = str.split(/\x1b\[([0-9;]+)m/);
+    for (let i = 0; i < parts.length; i++){
+      if (i % 2 === 0){
+        result += escapeHtml(parts[i]).replace(/\n/g, '<br/>');
+      } else {
+        const code = parts[i];
+        if (open){ result += '</span>'; open = false; }
+        if (code !== '0' && codes[code]){
+          result += `<span class="${codes[code]}">`;
+          open = true;
+        }
+      }
+    }
+    if (open) result += '</span>';
+    return result;
+  }
+
+  function termOut(text){
+    termBuffer += text;
+    outputEl.innerHTML = ansiToHtml(termBuffer);
+    outputEl.scrollTop = outputEl.scrollHeight;
+  }
+
+  function termClear(){
+    termBuffer = '';
+    outputEl.innerHTML = '';
+  }
+
+  function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+  function waitForInput(promptText, echo = true){
+    termOut(promptText);
+    return new Promise(resolve => {
+      inputEl.value = '';
+      inputWrap.classList.remove('hidden');
+      inputWrap.classList.add('flex');
+      inputEl.focus();
+      pendingResolve = (val) => {
+        termOut(echo ? (val + '\n') : '\n');
+        inputWrap.classList.add('hidden');
+        inputWrap.classList.remove('flex');
+        resolve(val);
+      };
+    });
+  }
+
+  inputEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && pendingResolve){
+      const val = inputEl.value;
+      const r = pendingResolve;
+      pendingResolve = null;
+      r(val);
+    }
+  });
+
+  async function leerEntero(promptText){
+    let p = promptText;
+    while (true){
+      const val = (await waitForInput(p)).trim();
+      if (/^-?\d+$/.test(val)) return parseInt(val, 10);
+      p = '\x1b[31mEntrada inválida. Por favor, ingrese un número entero válido: \x1b[0m';
+    }
+  }
+
+  async function leerDouble(promptText){
+    let p = promptText;
+    while (true){
+      const val = (await waitForInput(p)).trim();
+      if (val !== '' && !isNaN(val)) return parseFloat(val);
+      p = '\x1b[31mEntrada inválida. Por favor, ingrese un valor numérico válido: \x1b[0m';
+    }
+  }
+
+  async function leerTexto(promptText){
+    return (await waitForInput(promptText)).trim();
+  }
+
+  async function pausar(){
+    await waitForInput('\nPresione Enter para continuar...', false);
+  }
+
+  /* ============================================================
+     3. EJERCICIOS (réplica en JS de la lógica de main.cpp)
+     ============================================================ */
+  async function ejercicio1(){
+    termOut('\x1b[1;36m\n--- Ejercicio 1: Estadísticas de un arreglo ---\n\x1b[0m');
+    const n = await leerEntero('Por favor, ingrese la cantidad de números enteros para el arreglo: ');
+    if (n <= 0){ termOut('\x1b[31mLa cantidad debe ser mayor a cero.\n\x1b[0m'); await pausar(); return; }
+    const arreglo = [];
+    let suma = 0;
+    for (let i = 0; i < n; i++){
+      const v = await leerEntero(`Ingrese el número para la posición [${i}]: `);
+      arreglo.push(v); suma += v;
+    }
+    termOut('\x1b[1;33m\nContenido del arreglo: \x1b[0m');
+    let mayor = arreglo[0], menor = arreglo[0];
+    for (let i = 0; i < n; i++){
+      termOut(arreglo[i] + ' ');
+      if (arreglo[i] > mayor) mayor = arreglo[i];
+      if (arreglo[i] < menor) menor = arreglo[i];
+    }
+    const promedio = suma / n;
+    termOut(`\nSuma total: ${suma}`);
+    termOut(`\nPromedio: ${promedio}`);
+    termOut(`\nNúmero mayor: ${mayor}`);
+    termOut(`\nNúmero menor: ${menor}\n`);
+    await pausar();
+  }
+
+  async function ejercicio2(){
+    termOut('\x1b[1;36m\n--- Ejercicio 2: Buscar y contar ---\n\x1b[0m');
+    const n = await leerEntero('Por favor, ingrese la cantidad de números del arreglo: ');
+    if (n <= 0){ termOut('\x1b[31mLa cantidad debe ser mayor a cero.\n\x1b[0m'); await pausar(); return; }
+    const arreglo = [];
+    for (let i = 0; i < n; i++) arreglo.push(await leerEntero(`Ingrese el número para la posición [${i}]: `));
+    const buscar = await leerEntero('¿Qué número desea buscar?: ');
+    let primeraPos = -1, cantidad = 0; const posiciones = [];
+    for (let i = 0; i < n; i++){
+      if (arreglo[i] === buscar){ if (primeraPos === -1) primeraPos = i; cantidad++; posiciones.push(i); }
+    }
+    if (cantidad > 0){
+      termOut(`\x1b[32mPrimera posición encontrada: ${primeraPos}\n`);
+      termOut(`Cantidad de veces que aparece: ${cantidad}\n`);
+      termOut('Posiciones donde aparece: ');
+      posiciones.forEach(p => termOut(p + ' '));
+      termOut('\n\x1b[0m');
+    } else {
+      termOut(`\x1b[31mEl número ${buscar} no se encuentra en el arreglo.\n\x1b[0m`);
+    }
+    await pausar();
+  }
+
+  async function ejercicio3(){
+    termOut('\x1b[1;36m\n--- Ejercicio 3: Ordenamiento ---\n\x1b[0m');
+    const n = await leerEntero('Por favor, ingrese la cantidad de números a ordenar: ');
+    if (n <= 0){ termOut('\x1b[31mLa cantidad debe ser mayor a cero.\n\x1b[0m'); await pausar(); return; }
+    const arreglo = [];
+    for (let i = 0; i < n; i++) arreglo.push(await leerEntero(`Ingrese el número para la posición [${i}]: `));
+    termOut('\x1b[1;33mArreglo ANTES de ordenar: \x1b[0m');
+    arreglo.forEach(v => termOut(v + ' ')); termOut('\n');
+    const sorted = [...arreglo];
+    for (let i = 0; i < n - 1; i++)
+      for (let j = 0; j < n - i - 1; j++)
+        if (sorted[j] > sorted[j+1]){ [sorted[j], sorted[j+1]] = [sorted[j+1], sorted[j]]; }
+    termOut('\x1b[32mArreglo DESPUÉS de ordenar: \x1b[0m');
+    sorted.forEach(v => termOut(v + ' ')); termOut('\n');
+    await pausar();
+  }
+
+  async function ejercicio4(){
+    termOut('\x1b[1;36m\n--- Ejercicio 4: Búsqueda de palabras ---\n\x1b[0m');
+    const n = await leerEntero('Por favor, ingrese la cantidad de palabras del arreglo: ');
+    if (n <= 0){ termOut('\x1b[31mLa cantidad debe ser mayor a cero.\n\x1b[0m'); await pausar(); return; }
+    const palabras = [];
+    for (let i = 0; i < n; i++) palabras.push(await leerTexto(`Ingrese la palabra [${i}]: `));
+    const buscar = await leerTexto('¿Qué palabra desea buscar? (No distingue mayúsculas/minúsculas): ');
+    const bl = buscar.toLowerCase();
+    let cantidad = 0; const posiciones = [];
+    palabras.forEach((p,i) => { if (p.toLowerCase() === bl){ cantidad++; posiciones.push(i); } });
+    if (cantidad > 0){
+      termOut('\x1b[32mLa palabra SÍ existe en el arreglo.\n');
+      termOut(`Cantidad de veces que aparece: ${cantidad}\n`);
+      termOut('Posiciones donde se encuentra: ');
+      posiciones.forEach(p => termOut(p + ' '));
+      termOut('\n\x1b[0m');
+    } else {
+      termOut('\x1b[31mLa palabra no existe en el arreglo.\n\x1b[0m');
+    }
+    await pausar();
+  }
+
+  async function ejercicio5(){
+    termOut('\x1b[1;36m\n--- Ejercicio 5: Registro de estudiantes ---\n\x1b[0m');
+    const n = await leerEntero('¿Cuántos estudiantes desea registrar?: ');
+    if (n <= 0){ termOut('\x1b[31mLa cantidad debe ser mayor a cero.\n\x1b[0m'); await pausar(); return; }
+    const estudiantes = [];
+    for (let i = 0; i < n; i++){
+      termOut(`\x1b[1;33m\n--- Datos del estudiante ${i+1} ---\n\x1b[0m`);
+      const codigo = await leerTexto('Código del estudiante: ');
+      const nombre = await leerTexto('Nombre del estudiante: ');
+      const carrera = await leerTexto('Carrera: ');
+      const promedio = await leerDouble('Promedio: ');
+      estudiantes.push({codigo, nombre, carrera, promedio});
+    }
+    termOut('\x1b[1;33m\nLista de todos los estudiantes registrados:\n\x1b[0m');
+    let idxMax = 0;
+    estudiantes.forEach((e,i) => {
+      termOut(`- [${e.codigo}] ${e.nombre} (${e.carrera}) Promedio: ${e.promedio}\n`);
+      if (e.promedio > estudiantes[idxMax].promedio) idxMax = i;
+    });
+    const codigoBuscar = await leerTexto('\nIngrese un código para buscar al estudiante: ');
+    let encontradoCod = false;
+    estudiantes.forEach(e => { if (e.codigo === codigoBuscar){ termOut(`\x1b[32mEncontrado: ${e.nombre} de la carrera ${e.carrera}\n\x1b[0m`); encontradoCod = true; } });
+    if (!encontradoCod) termOut('\x1b[31mNo se encontró ningún estudiante con ese código.\n\x1b[0m');
+    const nombreBuscar = await leerTexto('\nIngrese un nombre para buscar al estudiante: ');
+    let encontradoNom = false;
+    estudiantes.forEach(e => { if (e.nombre.toLowerCase() === nombreBuscar.toLowerCase()){ termOut(`\x1b[32mEncontrado: Código ${e.codigo}, Carrera ${e.carrera}\n\x1b[0m`); encontradoNom = true; } });
+    if (!encontradoNom) termOut('\x1b[31mNo se encontró ningún estudiante con ese nombre.\n\x1b[0m');
+    termOut(`\x1b[32m\nEl estudiante con MAYOR promedio es: ${estudiantes[idxMax].nombre} con ${estudiantes[idxMax].promedio}\n\x1b[0m`);
+    await pausar();
+  }
+
+  async function ejercicio6(){
+    termOut('\x1b[1;36m\n--- Ejercicio 6: Estadísticas de una matriz ---\n\x1b[0m');
+    const filas = await leerEntero('Ingrese la cantidad de filas de la matriz: ');
+    const columnas = await leerEntero('Ingrese la cantidad de columnas de la matriz: ');
+    if (filas <= 0 || columnas <= 0){ termOut('\x1b[31mLas dimensiones deben ser mayores a cero.\n\x1b[0m'); await pausar(); return; }
+    const matriz = []; let suma = 0;
+    for (let i = 0; i < filas; i++){
+      const fila = [];
+      for (let j = 0; j < columnas; j++){
+        const v = await leerEntero(`Ingrese el valor para la fila ${i}, columna ${j}: `);
+        fila.push(v); suma += v;
+      }
+      matriz.push(fila);
+    }
+    termOut('\x1b[1;33m\nContenido de la matriz:\n\x1b[0m');
+    let mayor = matriz[0][0], menor = matriz[0][0];
+    for (let i = 0; i < filas; i++){
+      for (let j = 0; j < columnas; j++){
+        termOut(matriz[i][j] + '\t');
+        if (matriz[i][j] > mayor) mayor = matriz[i][j];
+        if (matriz[i][j] < menor) menor = matriz[i][j];
+      }
+      termOut('\n');
+    }
+    const promedio = suma / (filas * columnas);
+    termOut(`\nSuma total: ${suma}`);
+    termOut(`\nPromedio: ${promedio}`);
+    termOut(`\nValor mayor: ${mayor}`);
+    termOut(`\nValor menor: ${menor}\n`);
+    await pausar();
+  }
+
+  async function ejercicio7(){
+    termOut('\x1b[1;36m\n--- Ejercicio 7: Operaciones con matriz ---\n\x1b[0m');
+    const n = await leerEntero('Ingrese el tamaño N para las matrices cuadradas (NxN): ');
+    if (n <= 0){ termOut('\x1b[31mEl tamaño debe ser mayor a cero.\n\x1b[0m'); await pausar(); return; }
+    const A = [], B = [];
+    termOut('\x1b[1;33m\nDatos para la Matriz A:\n\x1b[0m');
+    for (let i = 0; i < n; i++){ const fila = []; for (let j = 0; j < n; j++) fila.push(await leerEntero(`Fila ${i}, columna ${j}: `)); A.push(fila); }
+    termOut('\x1b[1;33m\nDatos para la Matriz B:\n\x1b[0m');
+    for (let i = 0; i < n; i++){ const fila = []; for (let j = 0; j < n; j++) fila.push(await leerEntero(`Fila ${i}, columna ${j}: `)); B.push(fila); }
+    termOut('\x1b[1;33m\nSuma de matrices (A + B):\n\x1b[0m');
+    for (let i = 0; i < n; i++){ let line=''; for (let j = 0; j < n; j++) line += (A[i][j]+B[i][j]) + '\t'; termOut(line + '\n'); }
+    termOut('\x1b[1;33m\nResta de matrices (A - B):\n\x1b[0m');
+    for (let i = 0; i < n; i++){ let line=''; for (let j = 0; j < n; j++) line += (A[i][j]-B[i][j]) + '\t'; termOut(line + '\n'); }
+    termOut('\x1b[1;33m\nDiagonal principal de Matriz A: \x1b[0m');
+    for (let i = 0; i < n; i++) termOut(A[i][i] + ' ');
+    termOut('\x1b[1;33m\nDiagonal secundaria de Matriz A: \x1b[0m');
+    for (let i = 0; i < n; i++) termOut(A[i][n-1-i] + ' ');
+    termOut('\x1b[1;33m\n\nSuma de cada fila en Matriz A:\n\x1b[0m');
+    for (let i = 0; i < n; i++){ let s=0; for (let j=0;j<n;j++) s += A[i][j]; termOut(`Fila ${i}: ${s}\n`); }
+    termOut('\x1b[1;33m\nSuma de cada columna en Matriz A:\n\x1b[0m');
+    for (let j = 0; j < n; j++){ let s=0; for (let i=0;i<n;i++) s += A[i][j]; termOut(`Columna ${j}: ${s}\n`); }
+    await pausar();
+  }
+
+  async function ejercicio8(){
+    termOut('\x1b[1;36m\n--- Ejercicio 8: Buscar en una matriz ---\n\x1b[0m');
+    const filas = await leerEntero('Ingrese filas: ');
+    const columnas = await leerEntero('Ingrese columnas: ');
+    if (filas <= 0 || columnas <= 0){ termOut('\x1b[31mLas dimensiones deben ser mayores a cero.\n\x1b[0m'); await pausar(); return; }
+    const matriz = [];
+    for (let i = 0; i < filas; i++){ const fila = []; for (let j = 0; j < columnas; j++) fila.push(await leerEntero(`Valor en [${i}][${j}]: `)); matriz.push(fila); }
+    const buscar = await leerEntero('¿Qué número desea buscar en la matriz?: ');
+    let cantidad = 0;
+    termOut('\x1b[1;33m\nResultados de búsqueda:\n\x1b[0m');
+    for (let i = 0; i < filas; i++)
+      for (let j = 0; j < columnas; j++)
+        if (matriz[i][j] === buscar){ termOut(`\x1b[32mEncontrado en: Fila ${i}, Columna ${j}\n\x1b[0m`); cantidad++; }
+    if (cantidad > 0) termOut(`\x1b[32mCantidad total de veces que aparece: ${cantidad}\n\x1b[0m`);
+    else termOut('\x1b[31mEl número no existe en la matriz.\n\x1b[0m');
+    await pausar();
+  }
+
+  async function ejercicio9(){
+    const historial = [];
+    let opcion;
+    do {
+      termOut('\x1b[1;36m\n--- Ejercicio 9: Historial de páginas ---\n\x1b[0m');
+      termOut('1. Visitar página\n2. Atrás\n3. Ver página actual\n4. Mostrar historial\n0. Salir de este ejercicio\n');
+      opcion = await leerEntero('Ingrese su opción: ');
+      if (opcion === 1){
+        const pagina = await leerTexto('Ingrese la URL de la página a visitar: ');
+        historial.push(pagina);
+        termOut(`\x1b[32mVisitando: ${pagina}\n\x1b[0m`);
+      } else if (opcion === 2){
+        if (historial.length === 0) termOut('\x1b[31mNo hay páginas previas en el historial.\n\x1b[0m');
+        else {
+          const top = historial.pop();
+          termOut(`\x1b[1;33mRegresando de: ${top}\n\x1b[0m`);
+          if (historial.length > 0) termOut(`\x1b[32mAhora estás en: ${historial[historial.length-1]}\n\x1b[0m`);
+          else termOut('\x1b[1;33mEl historial quedó vacío. Pantalla de inicio.\n\x1b[0m');
+        }
+      } else if (opcion === 3){
+        if (historial.length === 0) termOut('\x1b[1;33mEl navegador está en la pantalla de inicio.\n\x1b[0m');
+        else termOut(`\x1b[32mPágina actual: ${historial[historial.length-1]}\n\x1b[0m`);
+      } else if (opcion === 4){
+        if (historial.length === 0) termOut('\x1b[31mEl historial está vacío.\n\x1b[0m');
+        else { termOut('\x1b[1;33m\n--- Historial completo ---\n\x1b[0m'); for (let i = historial.length-1; i >= 0; i--) termOut('- ' + historial[i] + '\n'); }
+      } else if (opcion === 0){
+        termOut('Saliendo del historial...\n');
+      } else {
+        termOut('\x1b[31mOpción no válida.\n\x1b[0m');
+      }
+      if (opcion !== 0) await pausar();
+    } while (opcion !== 0);
+  }
+
+  async function ejercicio10(){
+    const cola = [];
+    let opcion;
+    do {
+      termOut('\x1b[1;36m\n--- Ejercicio 10: Sistema de atención ---\n\x1b[0m');
+      termOut('1. Registrar estudiante\n2. Atender estudiante\n3. Ver siguiente estudiante\n4. Mostrar cola\n0. Salir de este ejercicio\n');
+      opcion = await leerEntero('Ingrese su opción: ');
+      if (opcion === 1){
+        const codigo = await leerTexto('Ingrese el código del estudiante: ');
+        const nombre = await leerTexto('Ingrese el nombre: ');
+        const tramite = await leerTexto('Ingrese el trámite: ');
+        cola.push({codigo, nombre, tramite});
+        termOut(`\x1b[32mEstudiante ${nombre} registrado exitosamente en la cola.\n\x1b[0m`);
+      } else if (opcion === 2){
+        if (cola.length === 0) termOut('\x1b[31mNo hay estudiantes en la cola para atender.\n\x1b[0m');
+        else {
+          const at = cola.shift();
+          termOut(`\x1b[32mAtendiendo a ${at.nombre}\n\x1b[0m`);
+          if (cola.length > 0){ termOut('\x1b[1;33mLa cola queda:\n\x1b[0m'); cola.forEach(e => termOut(e.nombre + '\n')); }
+          else termOut('\x1b[1;33mLa cola ha quedado vacía.\n\x1b[0m');
+        }
+      } else if (opcion === 3){
+        if (cola.length === 0) termOut('\x1b[31mLa cola está vacía.\n\x1b[0m');
+        else termOut(`\x1b[32mEl siguiente estudiante es: ${cola[0].nombre}\n\x1b[0m`);
+      } else if (opcion === 4){
+        if (cola.length === 0) termOut('\x1b[31mLa cola está vacía.\n\x1b[0m');
+        else { termOut('\x1b[1;33m\nCOLA ACTUAL:\n\x1b[0m'); cola.forEach((e,i) => termOut(`${i+1}. ${e.nombre}\n`)); }
+      } else if (opcion === 0){
+        termOut('Saliendo del sistema de atención...\n');
+      } else {
+        termOut('\x1b[31mOpción no válida.\n\x1b[0m');
+      }
+      if (opcion !== 0) await pausar();
+    } while (opcion !== 0);
+  }
+
+  async function ejercicio11(){
+    termOut('\x1b[1;36m\n--- Ejercicio 11: Inventario + matriz ---\n\x1b[0m');
+    const numProductos = await leerEntero('Por favor, indique la cantidad de productos a registrar: ');
+    if (numProductos <= 0){ termOut('\x1b[31mLa cantidad debe ser mayor a cero.\n\x1b[0m'); await pausar(); return; }
+    const dias = ['Lunes','Martes','Miércoles','Jueves','Viernes'];
+    const productos = []; const ventas = [];
+    for (let i = 0; i < numProductos; i++){
+      const nombre = await leerTexto(`\nIngrese el nombre para el Producto ${i+1}: `);
+      productos.push(nombre);
+      termOut(`Ingrese las ventas diarias (5 días) para ${nombre}:\n`);
+      const fila = [];
+      for (let j = 0; j < 5; j++) fila.push(await leerEntero(`  Ventas del día ${dias[j]}: `));
+      ventas.push(fila);
+    }
+    termOut('\x1b[1;33m\n--- Resultados y Estadísticas ---\n\x1b[0m');
+    termOut('\x1b[1;33m\n[Ventas totales por producto]\n\x1b[0m');
+    let maxVentasProd = -1, prodMasVendido = '', sumaGlobal = 0;
+    for (let i = 0; i < numProductos; i++){
+      const sumaFila = ventas[i].reduce((a,b) => a+b, 0);
+      termOut(`Producto ${i} (${productos[i]}) - Ventas totales: ${sumaFila}\n`);
+      sumaGlobal += sumaFila;
+      if (sumaFila > maxVentasProd){ maxVentasProd = sumaFila; prodMasVendido = productos[i]; }
+    }
+    termOut('\x1b[1;33m\n[Ventas totales por día]\n\x1b[0m');
+    let maxVentasDia = -1, diaConMasVentas = '';
+    for (let j = 0; j < 5; j++){
+      let sumaCol = 0; for (let i = 0; i < numProductos; i++) sumaCol += ventas[i][j];
+      termOut(`Día ${dias[j]} - Ventas totales: ${sumaCol}\n`);
+      if (sumaCol > maxVentasDia){ maxVentasDia = sumaCol; diaConMasVentas = dias[j]; }
+    }
+    const promedioGeneral = sumaGlobal / (numProductos * 5);
+    termOut('\x1b[32m\n[Resumen Final]\n');
+    termOut(`-> Producto más vendido: ${prodMasVendido} (con ${maxVentasProd} ventas)\n`);
+    termOut(`-> Día con mayores ventas: ${diaConMasVentas} (con ${maxVentasDia} ventas)\n`);
+    termOut(`-> Promedio de ventas: ${promedioGeneral}\n\x1b[0m`);
+    await pausar();
+  }
+
+  /* ============================================================
+     4. MENÚ PRINCIPAL Y CICLO DE EJECUCIÓN
+     ============================================================ */
+  function printMainMenu(){
+    termOut('\x1b[1;36m\n=============================================\n');
+    termOut('           MENÚ DE PRÁCTICA FINAL\n');
+    termOut('=============================================\n\x1b[0m');
+    termOut(' 1. Estadísticas de un arreglo\n');
+    termOut(' 2. Buscar y contar\n');
+    termOut(' 3. Ordenamiento\n');
+    termOut(' 4. Búsqueda de palabras\n');
+    termOut(' 5. Registro de estudiantes\n');
+    termOut(' 6. Estadísticas de una matriz\n');
+    termOut(' 7. Operaciones con matriz\n');
+    termOut(' 8. Buscar en una matriz\n');
+    termOut(' 9. Historial de páginas\n');
+    termOut('10. Sistema de atención\n');
+    termOut('11. Inventario + matriz\n');
+    termOut(' 0. Salir\n');
+    termOut('---------------------------------------------\n');
+  }
+
+  async function runProgram(){
+    termClear();
+    runBtn.disabled = true;
+    runBtn.classList.add('opacity-50', 'cursor-not-allowed');
+    termOut('\x1b[32m$ g++ main.cpp -o app && ./app\x1b[0m\n[Compilando y ejecutando...]\n');
+    await sleep(800);
+
+    let opcion;
+    do {
+      printMainMenu();
+      opcion = await leerEntero('Ingrese su opción: ');
+      switch (opcion){
+        case 1: await ejercicio1(); break;
+        case 2: await ejercicio2(); break;
+        case 3: await ejercicio3(); break;
+        case 4: await ejercicio4(); break;
+        case 5: await ejercicio5(); break;
+        case 6: await ejercicio6(); break;
+        case 7: await ejercicio7(); break;
+        case 8: await ejercicio8(); break;
+        case 9: await ejercicio9(); break;
+        case 10: await ejercicio10(); break;
+        case 11: await ejercicio11(); break;
+        case 0: termOut('\x1b[32m\n¡Saliendo del programa! Que tenga un excelente día.\n\x1b[0m'); break;
+        default: termOut('\x1b[31m\nOpción no válida. Por favor, intente de nuevo.\n\x1b[0m'); await pausar();
+      }
+    } while (opcion !== 0);
+
+    runBtn.disabled = false;
+    runBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+  }
+
+  /* ============================================================
+     5. INICIALIZACIÓN
+     ============================================================ */
+  document.addEventListener('DOMContentLoaded', () => {
+    const rawCode = document.getElementById('cpp-source').textContent.trim();
+    document.getElementById('code-content').innerHTML = highlightCpp(rawCode);
+    lucide.createIcons();
+    runBtn.addEventListener('click', runProgram);
+    termOut('\x1b[1;33mListo. Presiona RUN para compilar y ejecutar main.cpp\x1b[0m\n');
+  });
+</script>
+</body>
+</html>
