@@ -47,9 +47,3 @@ El código fuente principal (`main.cpp`) implementa buenas prácticas de program
 
 ---
 
-## Compilación y Ejecución
-Para compilar y ejecutar el código fuente en un entorno local con `g++`:
-
-```bash
-g++ -O2 main.cpp -o practica_final
-./practica_final
